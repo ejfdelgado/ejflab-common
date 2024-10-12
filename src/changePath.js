@@ -2,7 +2,7 @@ const fs = require('fs');
 
 /**
  * export NODE_SERVER_PATH=/app1/
- * node ./srcJs/changePath.js
+ * node ./node_modules/@ejfdelgado/ejflab-common/src/changePath.js
  */
 
 const NODE_SERVER_PATH = process.env.NODE_SERVER_PATH;
@@ -12,7 +12,7 @@ if (!NODE_SERVER_PATH) {
     return;
 }
 const DIST_DIR = "./dist/bundle";
-const FILE_PATHS = ["./srcJs/MyConstants.js"];
+const FILE_PATHS = ["./node_modules/@ejfdelgado/ejflab-common/src/MyConstants.js"];
 
 // Search bundle reference
 const fileList = fs.readdirSync(DIST_DIR).filter((fileName) => {
