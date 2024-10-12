@@ -1,6 +1,10 @@
 {
   "name": "@ejfdelgado/ejflab-common",
   "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ejfdelgado/ejflab-common.git"
+  },
   "description": "",
   "scripts": {},
   "engines": {
