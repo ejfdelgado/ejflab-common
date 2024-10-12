@@ -1,0 +1,37 @@
+{
+    "in": [
+        {
+            "column": "pink",
+            "min": 0,
+            "max": 1
+        },
+        {
+            "column": "small",
+            "min": 0,
+            "max": 1
+        }
+    ],
+    "out": {
+        "column": "quality",
+        "min": 0,
+        "max": 1,
+        "ngroups": 2
+    },
+    "layers": [
+        {
+            "units": 3,
+            "activation": "relu"
+        }
+    ],
+    "compile": {
+        "loss": "binaryCrossentropy",
+        "metrics": [
+            "accuracy"
+        ]
+    },
+    "fit": {
+        "shuffle": true,
+        "epochs": 20,
+        "validationSplit": 0.1
+    }
+}
