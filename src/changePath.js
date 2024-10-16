@@ -28,12 +28,16 @@ if (fileList.length > 0) {
 function changeSimpleFile(filePath) {
     console.log(`Modifiying ${filePath}...`);
     // Read content
-    let myConstantsContent = fs.readFileSync(filePath, { encoding: "utf8" });
-    // Change content
-    myConstantsContent = myConstantsContent.replaceAll(/(static\s*SRV_ROOT\s*=\s*)[^;]+;/ig, `$1"${NODE_SERVER_PATH}";`);
-    // Write content
-    fs.writeFileSync(filePath, myConstantsContent, { encoding: "utf8" });
-    //console.log(myConstantsContent);
+    if (fs.existsSync(filePath)) {
+        let myConstantsContent = fs.readFileSync(filePath, { encoding: "utf8" });
+        // Change content
+        myConstantsContent = myConstantsContent.replaceAll(/(static\s*SRV_ROOT\s*=\s*)[^;]+;/ig, `$1"${NODE_SERVER_PATH}";`);
+        // Write content
+        fs.writeFileSync(filePath, myConstantsContent, { encoding: "utf8" });
+        //console.log(myConstantsContent);
+    } else {
+        console.log(`Error ${filePath} dont exists! continue...`);
+    }
 }
 
 for (let i = 0; i < FILE_PATHS.length; i++) {
