@@ -12,7 +12,10 @@ if (!NODE_SERVER_PATH) {
     return;
 }
 const DIST_DIR = "./dist/bundle";
-const FILE_PATHS = ["./node_modules/@ejfdelgado/ejflab-common/src/MyConstants.js"];
+const FILE_PATHS = [
+    "./node_modules/@ejfdelgado/ejflab-common/src/MyConstants.js",
+    "./node_modules/@ejfdelgado/ejflab-back/node_modules/@ejfdelgado/ejflab-common/src/MyConstants.js"
+];
 
 // Search bundle reference
 const fileList = fs.readdirSync(DIST_DIR).filter((fileName) => {
