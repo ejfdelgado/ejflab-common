@@ -8,7 +8,7 @@ const { FlowChartDiagram } = require("../FlowChartDiagram.js");
 
 const { StepSleep } = require("./steps/StepSleep");
 const { StepOneTime } = require("./steps/StepOneTime");
-const { StepIsTrue } = require("./steps/StepIsTrue");
+const { StepIsTrue, StepIsFalse } = require("./steps/StepIsTrue");
 const { StepCheckSrc } = require("./steps/StepCheckSrc");
 
 const { CommandInc } = require("./steps/CommandInc");
@@ -51,6 +51,7 @@ class FlowChartExec {
         this.registry["sleep"] = StepSleep;
         this.registry["oneTime"] = StepOneTime;
         this.registry["isTrue"] = StepIsTrue;
+        this.registry["isFalse"] = StepIsFalse;
         this.registry["checkSrc"] = StepCheckSrc;
         this.registry["readSrc"] = StepReadSrc;
         this.registry["timelineEnds"] = StepTimeLineEnds;
