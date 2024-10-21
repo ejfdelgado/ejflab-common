@@ -130,6 +130,13 @@ class MyUtilities {
             second: str.replace(regex, () => copy.shift()[1]),
         }
     }
+
+    // MyUtilities.removeRepeatedSlash(
+    static removeRepeatedSlash(url) {
+        return url.replace(/^(https?:\/\/)(.*)$/g, (a, b, c) => {
+            return b + c.replace(/[/]{2,}/g, '/');
+        });
+    }
 }
 
 module.exports = {
