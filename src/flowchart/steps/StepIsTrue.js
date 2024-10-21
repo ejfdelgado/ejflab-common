@@ -10,7 +10,7 @@ class StepIsTrue extends StepBasic {
 class StepIsFalse extends StepBasic {
     async canContinue() {
         const result = this.args[0];
-        return !!result;
+        return !!!result;
     }
 }
 
