@@ -8,7 +8,7 @@ class MyUtilities {
         'aunque', 'sino', 'que', 'no', 'porque', 'pues'];
 
     static stringify(circ) {
-        const cache = [];
+        let cache = [];
         const text = JSON.stringify(circ, (key, value) => {
             if (typeof value === 'object' && value !== null) {
                 if (cache.includes(value)) return;
