@@ -6,9 +6,6 @@ class MyConstants {
     static NO_AUTO_PAGE_NAVITATION = ["/guides", "/assessment"];
     static CLOUD_RUN_URL = "https://mainapp-7b6hvjg6ia-uc.a.run.app/";
     static FIREBASE_CONFIG_FILE = "./credentials/firebase.pro.json";
-    static DOMAIN_ROUTER = {
-        "srv/opencv/solvepnp": MyConstants.CLOUD_RUN_URL
-    };
     static ANONYMOUS_PATHS = ['/uechat', '/call', '/nogales'];
     static BUCKET = {
         URL_BASE: "https://storage.googleapis.com",
@@ -85,18 +82,11 @@ class MyConstants {
         }
     }
     static resolveDomain(path) {
-        if (/https?:\/\//.test(path)) {
+        if (/^https?:\/\//i.test(path)) {
+            // It is a complete route
             return '';
         }
-        if (location.hostname == "localhost") {
-            return MyConstants.SRV_ROOT;
-        }
-        let domain = MyConstants.DOMAIN_ROUTER[path];
-        if (!domain) {
-            return MyConstants.SRV_ROOT;
-        } else {
-            return domain;
-        }
+        return MyConstants.SRV_ROOT;
     }
     //MyConstants.getPublicUrl()
     static getPublicUrl(keyName, addRandom = true) {

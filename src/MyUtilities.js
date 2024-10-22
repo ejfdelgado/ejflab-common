@@ -133,9 +133,13 @@ class MyUtilities {
 
     // MyUtilities.removeRepeatedSlash(
     static removeRepeatedSlash(url) {
-        return url.replace(/^(https?:\/\/)(.*)$/g, (a, b, c) => {
-            return b + c.replace(/[/]{2,}/g, '/');
-        });
+        if (/^https?:/.test(url)) {
+            return url.replace(/^(https?:\/\/)(.*)$/g, (a, b, c) => {
+                return b + c.replace(/[/]{2,}/g, '/');
+            });
+        } else {
+            return url.replace(/[/]{2,}/g, '/');
+        }
     }
 }
 

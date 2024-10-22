@@ -16,6 +16,9 @@ const FILE_PATHS = [
     "./node_modules/@ejfdelgado/ejflab-common/src/MyConstants.js",
     "./node_modules/@ejfdelgado/ejflab-back/node_modules/@ejfdelgado/ejflab-common/src/MyConstants.js"
 ];
+const HTML_PATHS = [
+    `${DIST_DIR}/index.html`
+];
 
 // Search bundle reference
 const fileList = fs.readdirSync(DIST_DIR).filter((fileName) => {
@@ -42,4 +45,24 @@ function changeSimpleFile(filePath) {
 
 for (let i = 0; i < FILE_PATHS.length; i++) {
     changeSimpleFile(FILE_PATHS[i]);
+}
+
+// Change also the html
+function changeHtmlTag(filePath) {
+    console.log(`Modifiying ${filePath}...`);
+    // Read content
+    if (fs.existsSync(filePath)) {
+        let myConstantsContent = fs.readFileSync(filePath, { encoding: "utf8" });
+        // Change content
+        myConstantsContent = myConstantsContent.replaceAll(/(<\s*base\s+href\s*=\s*")[^"]+("\s*>)/ig, `$1${NODE_SERVER_PATH}$2`);
+        // Write content
+        fs.writeFileSync(filePath, myConstantsContent, { encoding: "utf8" });
+        //console.log(myConstantsContent);
+    } else {
+        console.log(`Error ${filePath} dont exists! continue...`);
+    }
+}
+
+for (let i = 0; i < HTML_PATHS.length; i++) {
+    changeHtmlTag(HTML_PATHS[i]);
 }
