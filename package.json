@@ -1,7 +1,7 @@
 {
   "name": "@ejfdelgado/ejflab-common",
   "type": "commonjs",
-  "version": "1.5.4",
+  "version": "1.6.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ejfdelgado/ejflab-common.git"
@@ -10,7 +10,6 @@
   "scripts": {
     "mylogin": "npm login",
     "mypublish": "npm publish --access=public",
-    "diff": "unset GTK_PATH && git difftool",
     "clean": "rm -rf node_modules && npm cache clean --force && rm package-lock.json && npm install"
   },
   "engines": {

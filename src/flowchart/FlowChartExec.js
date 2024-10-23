@@ -26,6 +26,7 @@ const { SimpleObj } = require("../SimpleObj");
 const { CommandPrint } = require('./steps/CommandPrint');
 const { CommandMongo } = require('./steps/CommandMongo');
 const { CommandMinio } = require('./steps/CommandMinio');
+const { CommandPostgres } = require('./steps/CommandPostgres.js');
 
 class FlowChartExec {
     executionPromise = null;
@@ -68,6 +69,7 @@ class FlowChartExec {
         this.registry["mongo"] = CommandMongo;
         this.registry["print"] = CommandPrint;
         this.registry["minio"] = CommandMinio;
+        this.registry["postgres"] = CommandPostgres;
     }
 
     registerTimeline(id, timeline) {
