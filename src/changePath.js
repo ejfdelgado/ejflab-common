@@ -21,15 +21,19 @@ const HTML_PATHS = [
 ];
 
 // Search bundle reference
-const fileList = fs.readdirSync(DIST_DIR).filter((fileName) => {
-    return /^main\./.exec(fileName) != null;
-});
-if (fileList.length > 0) {
-    FILE_PATHS.push(`${DIST_DIR}/${fileList[0]}`);
+if (fs.existsSync(DIST_DIR)) {
+    const fileList = fs.readdirSync(DIST_DIR).filter((fileName) => {
+        return /^main\./.exec(fileName) != null;
+    });
+    if (fileList.length > 0) {
+        FILE_PATHS.push(`${DIST_DIR}/${fileList[0]}`);
+    }
+} else {
+    console.log(`Warning: folder ${DIST_DIR} does not exists!`);
 }
 
 function changeSimpleFile(filePath) {
-    console.log(`Modifiying ${filePath}...`);
+    console.log(`Trying ${filePath}...`);
     // Read content
     if (fs.existsSync(filePath)) {
         let myConstantsContent = fs.readFileSync(filePath, { encoding: "utf8" });
@@ -39,7 +43,7 @@ function changeSimpleFile(filePath) {
         fs.writeFileSync(filePath, myConstantsContent, { encoding: "utf8" });
         //console.log(myConstantsContent);
     } else {
-        console.log(`Error ${filePath} dont exists! continue...`);
+        console.log(`Warning: ${filePath} dont exists! continue...`);
     }
 }
 
@@ -49,7 +53,7 @@ for (let i = 0; i < FILE_PATHS.length; i++) {
 
 // Change also the html
 function changeHtmlTag(filePath) {
-    console.log(`Modifiying ${filePath}...`);
+    console.log(`Trying ${filePath}...`);
     // Read content
     if (fs.existsSync(filePath)) {
         let myConstantsContent = fs.readFileSync(filePath, { encoding: "utf8" });
@@ -59,7 +63,7 @@ function changeHtmlTag(filePath) {
         fs.writeFileSync(filePath, myConstantsContent, { encoding: "utf8" });
         //console.log(myConstantsContent);
     } else {
-        console.log(`Error ${filePath} dont exists! continue...`);
+        console.log(`Warning: ${filePath} dont exists! continue...`);
     }
 }
 
