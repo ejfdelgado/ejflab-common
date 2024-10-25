@@ -27,6 +27,7 @@ const { CommandPrint } = require('./steps/CommandPrint');
 const { CommandMongo } = require('./steps/CommandMongo');
 const { CommandMinio } = require('./steps/CommandMinio');
 const { CommandPostgres } = require('./steps/CommandPostgres.js');
+const { StepMultiple } = require('./steps/StepMultiple.js');
 
 class FlowChartExec {
     executionPromise = null;
@@ -59,6 +60,7 @@ class FlowChartExec {
         this.registry["timelineHasMore"] = StepTimeLineHasMore;
         this.registry["process"] = StepProcess;
         this.registry["require"] = StepCheckProcessor;
+        this.registry["multiple"] = StepMultiple;
 
         // Nodes
         this.registry["inc"] = CommandInc;
