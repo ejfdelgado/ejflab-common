@@ -273,13 +273,23 @@ class FlowChartExec {
     }
 
     loadFlowChart(paths) {
-        this.flowchart = {
-            shapes: [],
-            arrows: [],
-            prefixes: [],
-            flux: {},
-        };
-        this.nodesById = {};
+        return this.loadFlowChartInternal(paths, true);
+    }
+
+    complementFlowChart(paths) {
+        return this.loadFlowChartInternal(paths, false);
+    }
+
+    loadFlowChartInternal(paths, initialize) {
+        if (initialize) {
+            this.flowchart = {
+                shapes: [],
+                arrows: [],
+                prefixes: [],
+                flux: {},
+            };
+            this.nodesById = {};
+        }
         const options = {
             ignoreAttributes: false,
         };
