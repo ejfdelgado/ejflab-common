@@ -8,6 +8,7 @@ class CommandPostgres extends CommandBasic {
         const bodyPath = this.args[2];
         //srv/wideSight/sql/writes/object.sql
         const script = this.args[3];
+        const destination = this.args[4];
         const postgresSrv = this.context.getSuperContext().getPostgresClient();
         if (action == "execute") {
             //console.log("Starting execute...");
@@ -40,7 +41,35 @@ class CommandPostgres extends CommandBasic {
                 client.release();
             }
             //console.log("Finishing execute...");
-            //console.log(JSON.stringify(response));
+            if (typeof destination == "string" && destination.trim().length > 0) {
+                let generalResponse = null;
+                if (response.length == 1) {
+                    const rows = response[0].rows;
+                    if (rows) {
+                        const noList = !!this.args[5];
+                        if (rows.length == 1 && noList) {
+                            generalResponse = rows[0];
+                        } else {
+                            const first = response[0];
+                            generalResponse = {
+                                command: first.command,
+                                rowCount: first.rowCount,
+                                rows: first.rows,
+                            };
+                        }
+                    }
+                    SimpleObj.recreate(this.context.data, destination, generalResponse);
+                } else if (response.length > 1) {
+                    generalResponse = response.map((elem) => {
+                        return {
+                            command: elem.command,
+                            rowCount: elem.rowCount,
+                            rows: elem.rows,
+                        }
+                    });
+                    SimpleObj.recreate(this.context.data, destination, generalResponse);
+                }
+            }
         }
     }
 }
