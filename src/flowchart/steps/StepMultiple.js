@@ -21,6 +21,7 @@ class StepMultiple extends StepBasic {
     }
     async execFirst() {
         // Reads the list to iterate
+        const room = this.context.getRoom();
         this.list = SimpleObj.getValue(this.context.data, this.args[1], []);
         const WORKSPACE = SimpleObj.getValue(this.context.data, "env.WORKSPACE", "./");
         //console.log(`WORKSPACE=${WORKSPACE}`);
@@ -31,7 +32,13 @@ class StepMultiple extends StepBasic {
             Print: '${WORKSPACE}/flowcharts/multiple/flow01N.drawio',
         };
         this.completePaths(extraConfiguration, WORKSPACE);
-        this.context.complementFlowChart(extraConfiguration);
+        // Force update the model
+        const superContext = this.context.getSuperContext();
+        const roomData = superContext.getRoomLiveTupleModel(room);
+        roomData.model.flowchart = this.context.complementFlowChart(extraConfiguration);
+        let changes = roomData.builder.trackDifferences(roomData.model, [], null, ["flowchart"]);
+        roomData.model = roomData.builder.affect(changes);
+        superContext.emitToRoom(room, "flowChartModified");
     }
 
     async canContinue() {
