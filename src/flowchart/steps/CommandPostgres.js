@@ -13,8 +13,13 @@ class CommandPostgres extends CommandBasic {
         if (action == "execute") {
             //console.log("Starting execute...");
             const dbIdData = SimpleObj.getValue(this.context.data, dbIdPath, null);
-            let bodyData = SimpleObj.getValue(this.context.data, bodyPath, null);
-            bodyData = JSON.parse(JSON.stringify(bodyData));
+            let bodyData = {};
+            if (typeof bodyPath == "string") {
+                bodyData = SimpleObj.getValue(this.context.data, bodyPath, {});
+                bodyData = JSON.parse(JSON.stringify(bodyData));
+            } else if (typeof bodyPath == "object" && bodyPath !== null) {
+                bodyData = bodyPath;
+            }
             if (!(bodyData instanceof Array)) {
                 bodyData = [bodyData]
             }
