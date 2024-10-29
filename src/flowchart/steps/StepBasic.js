@@ -36,13 +36,16 @@ class StepBasic {
         this.startTime = new Date().getTime();
     }
     toc() {
-        const MAX_TIME_DATA = 10;
+        let MAX_TIME_DATA = 10;
         this.endTime = new Date().getTime();
         this.duration = this.endTime - this.startTime;
         // Read the performance object
         let performance = SimpleObj.getValue(this.context.data, "performance", {});
         if (performance.track !== true) {
             return;
+        }
+        if (typeof performance.n == "number") {
+            MAX_TIME_DATA = performance.n;
         }
         // Notify
         const idTxt = `${this.commandName}«${this.argsTxtIndividual}»`;
