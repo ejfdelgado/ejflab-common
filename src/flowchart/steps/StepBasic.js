@@ -36,10 +36,32 @@ class StepBasic {
         this.startTime = new Date().getTime();
     }
     toc() {
+        const MAX_TIME_DATA = 10;
         this.endTime = new Date().getTime();
         this.duration = this.endTime - this.startTime;
+        // Read the performance object
+        let performance = SimpleObj.getValue(this.context.data, "performance", {});
+        if (performance.track !== true) {
+            return;
+        }
         // Notify
-        console.log(`TOC: ${this.duration}ms commandName=${this.commandName} args=${this.argsTxtIndividual}`);
+        const idTxt = `${this.commandName}«${this.argsTxtIndividual}»`;
+        const id = "d" + Buffer.from(idTxt).toString('base64');
+        if (!(id in performance)) {
+            const val = {
+                txt: idTxt,
+                time: [this.duration],
+            }
+            SimpleObj.recreate(this.context.data, `performance.${id}`, val);
+        } else {
+            const val = performance[id];
+            val.time.push(this.duration);
+            const overflow = val.time.length - MAX_TIME_DATA;
+            if (overflow > 0) {
+                val.time.splice(0, overflow);
+            }
+            SimpleObj.recreate(this.context.data, `performance.${id}.time`, val.time);
+        }
     }
     async executeAsNode(args, argsTxtIndividual) {
         this.argsTxtIndividual = argsTxtIndividual;
