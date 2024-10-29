@@ -15,7 +15,11 @@ class StepBasic {
     nextTry = null;
     commandName;
     argsTxt;
+    argsTxtIndividual;
     fireTime;
+    startTime = null;
+    endTime = null;
+    duration = null;
     constructor(context, id, commandName, argsTxt) {
         this.context = context;
         this.id = id;
@@ -28,7 +32,17 @@ class StepBasic {
     setMaxTries(value) {
         this.maxErrorCount = value;
     }
-    async executeAsNode(args) {
+    tic() {
+        this.startTime = new Date().getTime();
+    }
+    toc() {
+        this.endTime = new Date().getTime();
+        this.duration = this.endTime - this.startTime;
+        // Notify
+        console.log(`TOC: ${this.duration}ms commandName=${this.commandName} args=${this.argsTxtIndividual}`);
+    }
+    async executeAsNode(args, argsTxtIndividual) {
+        this.argsTxtIndividual = argsTxtIndividual;
         const answer = {
             canContinue: false,
             abort: false,
@@ -48,8 +62,10 @@ class StepBasic {
         }
         try {
             this.args = args;
+            this.tic();
             await this.execFirst();
             await this.execLast({ isCommand: true });
+            this.toc();
             answer.canContinue = true;
             this.resetErrorState();
             return answer;
@@ -59,7 +75,8 @@ class StepBasic {
             return answer;
         }
     }
-    async executeAsArrow(args) {
+    async executeAsArrow(args, argsTxtIndividual) {
+        this.argsTxtIndividual = argsTxtIndividual;
         const answer = {
             canContinue: false,
             abort: false,
@@ -86,6 +103,7 @@ class StepBasic {
                 }
             }
             if (this.firstTime) {
+                this.tic();
                 const done = await this.execFirst();
                 if (done === false) {
                     return answer;
@@ -96,6 +114,7 @@ class StepBasic {
             answer.canContinue = await this.canContinue();
             if (answer.canContinue) {
                 await this.execLast();
+                this.toc();
                 this.fired = true;
                 this.resetErrorState();
             } else {

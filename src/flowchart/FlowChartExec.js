@@ -392,7 +392,7 @@ class FlowChartExec {
             let instance = this.createInstance(commandName, id, txt, args);
             index++;
             const response1 = `${commandName}${JSON.stringify(args)}`;
-            const { canContinue, abort } = await instance.executeAsNode(args);
+            const { canContinue, abort } = await instance.executeAsNode(args, argsTxt);
             if (abort) {
                 // Panic and halt all
                 this.mustEnd = true;
@@ -429,7 +429,7 @@ class FlowChartExec {
             }
             index++;
             const response1 = `${commandName}${JSON.stringify(args)}`;
-            const { canContinue, abort } = await instance.executeAsArrow(args);
+            const { canContinue, abort } = await instance.executeAsArrow(args, argsTxt);
             if (abort) {
                 // Panic and halt all
                 this.mustEnd = true;
