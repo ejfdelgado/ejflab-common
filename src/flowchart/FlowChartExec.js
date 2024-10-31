@@ -276,11 +276,12 @@ class FlowChartExec {
         return this.loadFlowChartInternal(paths, true);
     }
 
-    complementFlowChart(paths) {
-        return this.loadFlowChartInternal(paths, false);
+    complementFlowChart(paths, indexPath) {
+        console.log("complementFlowChart...");
+        return this.loadFlowChartInternal(paths, false, indexPath);
     }
 
-    loadFlowChartInternal(paths, initialize) {
+    loadFlowChartInternal(paths, initialize, indexPath) {
         if (initialize) {
             this.flowchart = {
                 shapes: [],
@@ -295,6 +296,12 @@ class FlowChartExec {
         };
         const llaves = Object.keys(paths);
         llaves.forEach((prefix) => {
+            // Get index Number from prefix if matches the pattern
+            const prefixGroupsNumber = /_([\d]+)$/.exec(prefix);
+            let index = null;
+            if (prefixGroupsNumber) {
+                index = parseInt(prefixGroupsNumber[1]);
+            }
             const path = paths[prefix];
             const xmlFlowText = fs.readFileSync(path, 'utf8');
             const parser = new XMLParser(options);
@@ -303,6 +310,15 @@ class FlowChartExec {
             this.interpretColor(localFlowChart.shapes);
             // 
             const check = this.checkTypeOfChart(localFlowChart);
+            if (typeof indexPath == "string" && !isNaN(index)) {
+                // Write metadata of node
+                const placeMetadata = (node) => {
+                    node.indexPath = indexPath;
+                    SimpleObj.recreate(node, `meta.${indexPath}`, index);
+                }
+                localFlowChart.shapes.forEach(placeMetadata);
+                localFlowChart.arrows.forEach(placeMetadata);
+            }
             this.flowchart.shapes.push(...localFlowChart.shapes);
             this.flowchart.arrows.push(...localFlowChart.arrows);
             this.flowchart.prefixes.push(prefix);
@@ -312,8 +328,6 @@ class FlowChartExec {
                 }
             }
         });
-
-        //console.log(JSON.stringify(this.flowchart.flux, null, 4));
 
         // Se indexan los nodos por id
         const BLACK_LIST = ["flux"];
