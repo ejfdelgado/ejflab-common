@@ -278,12 +278,13 @@ class FlowChartExec {
         return this.loadFlowChartInternal(paths, true);
     }
 
-    complementFlowChart(paths, indexPath) {
-        console.log("complementFlowChart...");
-        return this.loadFlowChartInternal(paths, false, indexPath);
+    complementFlowChart(paths, indexPath, parentNode) {
+        //console.log(`complementFlowChart indexPath=${indexPath}`);
+        return this.loadFlowChartInternal(paths, false, indexPath, parentNode);
     }
 
-    loadFlowChartInternal(paths, initialize, indexPath) {
+    loadFlowChartInternal(paths, initialize, indexPath, parentNode = {}) {
+        //console.log(`loadFlowChartInternal indexPath=${indexPath}`);
         if (initialize) {
             this.flowchart = {
                 shapes: [],
@@ -316,7 +317,12 @@ class FlowChartExec {
                 // Write metadata of node
                 const placeMetadata = (node) => {
                     node.indexPath = indexPath;
+                    // Read the parent meta
+                    if (parentNode.meta) {
+                        SimpleObj.recreate(node, "meta", JSON.parse(JSON.stringify(parentNode.meta)));
+                    }
                     SimpleObj.recreate(node, `meta.${indexPath}`, index);
+                    //console.log(node.prefix + ":" + JSON.stringify(node.meta));
                 }
                 localFlowChart.shapes.forEach(placeMetadata);
                 localFlowChart.arrows.forEach(placeMetadata);
@@ -391,7 +397,9 @@ class FlowChartExec {
                 if (node.meta) {
                     // Render skiping meta
                     const skipUndefined = true;
+                    //console.log(`${rendered} ${JSON.stringify(node.meta)}`);
                     rendered = this.renderer.render(rendered, node.meta, skipUndefined);
+                    //console.log(`${rendered}`);
                 }
                 rendered = this.renderer.render(rendered, this.data);
                 let value;
@@ -418,7 +426,7 @@ class FlowChartExec {
             let instance = this.createInstance(commandName, id, txt, args);
             index++;
             const response1 = `${commandName}${JSON.stringify(args)}`;
-            const { canContinue, abort } = await instance.executeAsNode(args, argsTxt);
+            const { canContinue, abort } = await instance.executeAsNode(args, argsTxt, node);
             if (abort) {
                 // Panic and halt all
                 this.mustEnd = true;
@@ -455,7 +463,7 @@ class FlowChartExec {
             }
             index++;
             const response1 = `${commandName}${JSON.stringify(args)}`;
-            const { canContinue, abort } = await instance.executeAsArrow(args, argsTxt);
+            const { canContinue, abort } = await instance.executeAsArrow(args, argsTxt, node);
             if (abort) {
                 // Panic and halt all
                 this.mustEnd = true;

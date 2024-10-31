@@ -38,13 +38,15 @@ class StepMultiple extends StepBasic {
         }
         if (routeMultiple) {
             const extraConfiguration = {};
-
+            let prefixName = `${flowChartTemplateName}_`;
+            if (typeof this.node.prefix == "string") {
+                prefixName = this.node.prefix + "_" + prefixName;
+            }
             for (let i = 0; i < this.list.length; i++) {
-                extraConfiguration[`${flowChartTemplateName}_${i}`] = routeMultiple;
+                extraConfiguration[prefixName + i] = routeMultiple;
             }
             this.completePaths(extraConfiguration, WORKSPACE);
-
-            roomData.model.flowchart = this.context.complementFlowChart(extraConfiguration, indexPath);
+            roomData.model.flowchart = this.context.complementFlowChart(extraConfiguration, indexPath, this.node);
             let changes = roomData.builder.trackDifferences(roomData.model, [], null, ["flowchart"]);
             roomData.model = roomData.builder.affect(changes);
             superContext.emitToRoom(room, "flowChartModified");

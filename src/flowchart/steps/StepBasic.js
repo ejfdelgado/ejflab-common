@@ -66,7 +66,8 @@ class StepBasic {
             SimpleObj.recreate(this.context.data, `performance.${id}.time`, val.time);
         }
     }
-    async executeAsNode(args, argsTxtIndividual) {
+    async executeAsNode(args, argsTxtIndividual, node) {
+        this.node = node;
         this.argsTxtIndividual = argsTxtIndividual;
         const answer = {
             canContinue: false,
@@ -100,7 +101,8 @@ class StepBasic {
             return answer;
         }
     }
-    async executeAsArrow(args, argsTxtIndividual) {
+    async executeAsArrow(args, argsTxtIndividual, node) {
+        this.node = node;
         this.argsTxtIndividual = argsTxtIndividual;
         const answer = {
             canContinue: false,
