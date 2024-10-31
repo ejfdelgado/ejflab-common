@@ -28,6 +28,7 @@ const { CommandMongo } = require('./steps/CommandMongo');
 const { CommandMinio } = require('./steps/CommandMinio');
 const { CommandPostgres } = require('./steps/CommandPostgres.js');
 const { StepMultiple } = require('./steps/StepMultiple.js');
+const { StepMultipleDone } = require('./steps/StepMultipleDone.js');
 
 class FlowChartExec {
     executionPromise = null;
@@ -61,6 +62,7 @@ class FlowChartExec {
         this.registry["process"] = StepProcess;
         this.registry["require"] = StepCheckProcessor;
         this.registry["multiple"] = StepMultiple;
+        this.registry["multipleDone"] = StepMultipleDone;
 
         // Nodes
         this.registry["inc"] = CommandInc;
@@ -318,6 +320,10 @@ class FlowChartExec {
                 }
                 localFlowChart.shapes.forEach(placeMetadata);
                 localFlowChart.arrows.forEach(placeMetadata);
+                const startingPoints = this.getNodesWithText("start", undefined, localFlowChart);
+                if (this.actualNodes instanceof Array && startingPoints instanceof Array) {
+                    this.actualNodes.push(...startingPoints);
+                }
             }
             this.flowchart.shapes.push(...localFlowChart.shapes);
             this.flowchart.arrows.push(...localFlowChart.arrows);

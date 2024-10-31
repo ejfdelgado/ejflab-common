@@ -209,7 +209,7 @@ class MyTemplate extends CsvWithFilters {
         } while (iteration.times > 0);
 
         // Replace values
-        return this.replaceBareValues(template, data, "\\{", "\\}", "}", false, skipUndefined);
+        return this.replaceBareValues(template, data, undefined, undefined, undefined, false, skipUndefined);
     }
     replaceBareValues(template, data, open = "\\{", close = "\\}", closeNoScape = "}", useStringify = false, skipUndefined = false) {
         const myPattern = new RegExp("\\$\\s*" + open + "([^" + closeNoScape + "]+)\\s*" + close, "g");
