@@ -194,7 +194,7 @@ class MyTemplate extends CsvWithFilters {
             };
         }
     }
-    render(template, data) {
+    render(template, data, skipUndefined = false) {
 
         let iteration = {};
         do {
@@ -209,19 +209,32 @@ class MyTemplate extends CsvWithFilters {
         } while (iteration.times > 0);
 
         // Replace values
-        return this.replaceBareValues(template, data);
+        return this.replaceBareValues(template, data, "\\{", "\\}", "}", false, skipUndefined);
     }
-    replaceBareValues(template, data, open = "\\{", close = "\\}", closeNoScape = "}", useStringify = false) {
+    replaceBareValues(template, data, open = "\\{", close = "\\}", closeNoScape = "}", useStringify = false, skipUndefined = false) {
         const myPattern = new RegExp("\\$\\s*" + open + "([^" + closeNoScape + "]+)\\s*" + close, "g");
         template = template.replace(myPattern, (match, g1) => {
             const response = this.getColumnDescription(g1)[0];
             const valor = SimpleObj.getValue(data, response.id);
             if (!useStringify) {
                 const temp = this.filterValue(valor, response, undefined, response.id);
-                if (typeof temp == "object") {
-                    return JSON.stringify(temp);
+                if (!skipUndefined) {
+                    // Duplicated code...
+                    if (typeof temp == "object") {
+                        return JSON.stringify(temp);
+                    }
+                    return temp;
+                } else {
+                    if (temp === undefined) {
+                        return match;
+                    } else {
+                        // Duplicated code...
+                        if (typeof temp == "object") {
+                            return JSON.stringify(temp);
+                        }
+                        return temp;
+                    }
                 }
-                return temp;
             } else {
                 const temp = this.filterValue(valor, response, undefined, response.id);
                 return JSON.stringify(temp);

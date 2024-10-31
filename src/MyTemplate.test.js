@@ -63,7 +63,19 @@ function myTest() {
                 ]
             },
             exp: "Filtrado 3 sí debe salir",
-        }
+        },
+        {
+            txt: "my name is ${name} ${lastname} and I like ${colors.0.id} ${colors.0.id}",
+            data: { lastname: "Delgado" },
+            exp: "my name is ${name} Delgado and I like ${colors.0.id} ${colors.0.id}",
+            skipUndefined: true,
+        },
+        {
+            txt: "my name is ${name} ${lastname} and I like ${colors.0.id} ${colors.0.id}",
+            data: { lastname: "Delgado" },
+            exp: "my name is undefined Delgado and I like undefined undefined",
+            skipUndefined: false,
+        },
     ];
 
     renderer.registerFunction("json", CsvFormatterFilters.json);
@@ -75,7 +87,7 @@ function myTest() {
 
     for (let i = 0; i < cases.length; i++) {
         const myCase = cases[i];
-        const actual = renderer.render(myCase.txt, myCase.data);
+        const actual = renderer.render(myCase.txt, myCase.data, myCase.skipUndefined === true);
         //console.log(actual);
         if (actual !== myCase.exp) {
             throw Error(`expected:\n${myCase.exp}\nactual:\n${actual}`);

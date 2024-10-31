@@ -373,7 +373,7 @@ class FlowChartExec {
         return instance;
     }
 
-    interpretArguments(argTxt) {
+    interpretArguments(argTxt, node) {
         //console.log(`Interpret ${argTxt}`);
         const tokens = argTxt.split(";");
         const args = [];
@@ -381,7 +381,13 @@ class FlowChartExec {
             const token = tokens[i];
             // Interpret with template
             if (token.trim().length > 0) {
-                const rendered = this.renderer.render(token, this.data);
+                let rendered = token;
+                if (node.meta) {
+                    // Render skiping meta
+                    const skipUndefined = true;
+                    rendered = this.renderer.render(rendered, node.meta, skipUndefined);
+                }
+                rendered = this.renderer.render(rendered, this.data);
                 let value;
                 try {
                     value = eval(rendered);
@@ -402,7 +408,7 @@ class FlowChartExec {
         }
         let index = 0;
         const answered = await MyUtilities.replaceAsync2(txt, /(([a-z]+)«([^»]*)»)/ig, async (match, g1, commandName, argsTxt) => {
-            const args = this.interpretArguments(argsTxt);
+            const args = this.interpretArguments(argsTxt, node);
             let instance = this.createInstance(commandName, id, txt, args);
             index++;
             const response1 = `${commandName}${JSON.stringify(args)}`;
@@ -430,7 +436,7 @@ class FlowChartExec {
         }
         let index = 0;
         const answered = await MyUtilities.replaceAsync2(txt, /(([a-z]+)«([^»]*)»)/ig, async (match, g1, commandName, argsTxt) => {
-            const args = this.interpretArguments(argsTxt);
+            const args = this.interpretArguments(argsTxt, node);
             let instance = null;
             if (create || !this.instances[id][`${index}`]) {
                 instance = this.createInstance(commandName, id, txt, args);
