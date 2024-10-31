@@ -23,22 +23,29 @@ class StepMultiple extends StepBasic {
         // Reads the list to iterate
         const room = this.context.getRoom();
         this.list = SimpleObj.getValue(this.context.data, this.args[1], []);
-        const WORKSPACE = SimpleObj.getValue(this.context.data, "env.WORKSPACE", "./");
-        //console.log(`WORKSPACE=${WORKSPACE}`);
-        //console.log(`My list ${JSON.stringify(this.list)}`);
-        // Loads the draw.io file
+        const WORKSPACE = SimpleObj.getValue(this.context.data, "env.WORKSPACE", ".");
         const flowChartTemplateName = this.args[0];
-        const extraConfiguration = {
-            Print: '${WORKSPACE}/flowcharts/multiple/flow01N.drawio',
-        };
-        this.completePaths(extraConfiguration, WORKSPACE);
         // Force update the model
         const superContext = this.context.getSuperContext();
         const roomData = superContext.getRoomLiveTupleModel(room);
-        roomData.model.flowchart = this.context.complementFlowChart(extraConfiguration);
-        let changes = roomData.builder.trackDifferences(roomData.model, [], null, ["flowchart"]);
-        roomData.model = roomData.builder.affect(changes);
-        superContext.emitToRoom(room, "flowChartModified");
+        const routeMultiple = SimpleObj.getValue(roomData, `model.multiples.${flowChartTemplateName}`, null);
+        //console.log(`flowChartTemplateName=${flowChartTemplateName} routeMultiple=${routeMultiple}`)
+        if (routeMultiple) {
+            const extraConfiguration = {};
+
+            for (let i = 0; i < this.list.length; i++) {
+                extraConfiguration[`${flowChartTemplateName}_${i}`] = routeMultiple;
+            }
+            this.completePaths(extraConfiguration, WORKSPACE);
+
+            roomData.model.flowchart = this.context.complementFlowChart(extraConfiguration);
+            let changes = roomData.builder.trackDifferences(roomData.model, [], null, ["flowchart"]);
+            roomData.model = roomData.builder.affect(changes);
+            superContext.emitToRoom(room, "flowChartModified");
+        } else {
+            console.log(`Error: Can't find model.multiples.${flowChartTemplateName}`);
+            //console.log(JSON.stringify(roomData, null, 4));
+        }
     }
 
     async canContinue() {
