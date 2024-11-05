@@ -217,6 +217,7 @@ class StepBasic {
     breakPath(val) {
         const partsSource = /^(b\.([^.]+)([^\s]+)|d.(.+))$/i.exec(val);
         if (partsSource == null) {
+            //console.log(`${val} doesn't match ^(b\.([^.]+)([^\s]+)|d.(.+))$`);
             return undefined;
         }
         return {

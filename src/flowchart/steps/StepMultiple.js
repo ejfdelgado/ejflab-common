@@ -23,7 +23,7 @@ class StepMultiple extends StepBasic {
         // console.log(`StepMultiple ${JSON.stringify(this.args)}`);
         // Reads the list to iterate
         const room = this.context.getRoom();
-        this.list = SimpleObj.getValue(this.context.data, this.args[1], []);
+        this.list = this.resolveArgument(this.args[1]);
         const WORKSPACE = SimpleObj.getValue(this.context.data, "env.WORKSPACE", ".");
         const flowChartTemplateName = this.args[0];
         const indexPath = this.args[2];

@@ -10,7 +10,7 @@ class StepMultipleDone extends StepBasic {
     async execFirst() { }
 
     async canContinue() {
-        this.list = SimpleObj.getValue(this.context.data, this.args[0], []);
+        this.list = this.resolveArgument(this.args[0]);
         if (!(this.list instanceof Array)) {
             console.log(`In StepMultipleDone, warning ${this.args[0]} is not a list!`);
             return true;
