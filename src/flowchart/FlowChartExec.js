@@ -85,19 +85,28 @@ class FlowChartExec {
     }
 
     saveBufferData(sourceId, pathId, buffer) {
-        //console.log(`saveBufferData ${sourceId} ${pathId}`, buffer);
-        if (!this.bufferData[sourceId]) {
-            this.bufferData[sourceId] = {};
+        let pathId2 = pathId;
+        if (!pathId2.startsWith(".")) {
+            pathId2 = "." + pathId2;
         }
-        this.bufferData[sourceId][pathId] = buffer;
+        const compoundKey = `${sourceId}${pathId2}`;
+        const parts = /^(.*)\.([^.]+)$/.exec(compoundKey);
+        if (!parts) {
+            console.log("ERROR! Key must contain at least two parts separated with a dot");
+            return;
+        }
+        const baseKey = parts[1];
+        const endKey = parts[2];
+        SimpleObj.recreate(this.bufferData, compoundKey, true);
+        const baseObject = SimpleObj.getValue(this.bufferData, baseKey, {});
+        baseObject[endKey] = buffer;
     }
 
     readBufferData(sourceId, pathId) {
-        //console.log(`readBufferData ${sourceId} ${pathId}`);
-        if (!this.bufferData[sourceId]) {
-            this.bufferData[sourceId] = {};
+        if (!pathId.startsWith(".")) {
+            pathId = "." + pathId;
         }
-        return this.bufferData[sourceId][pathId];
+        return SimpleObj.getValue(this.bufferData, `${sourceId}${pathId}`, null);
     }
 
     registerPendingCall(id, val = true) {

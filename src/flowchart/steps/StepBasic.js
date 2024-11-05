@@ -204,7 +204,7 @@ class StepBasic {
             // It reads from buffer
             buffer = this.context.readBufferData(sourceId, pathId);
             if (!buffer) {
-                console.log(`No buffer in ${sourceId} ${pathId}`);
+                console.log(`No buffer in ${sourceId}${pathId}`);
                 return undefined;
             }
         } else {
@@ -214,13 +214,27 @@ class StepBasic {
         return buffer;
     }
 
-    resolveArgument(val) {
-        const partsSource = /^(b\.([^.]+)\.([^.]+)|d\.(.+))$/i.exec(val);
+    breakPath(val) {
+        const partsSource = /^(b\.([^.]+)([^\s]+)|d.(.+))$/i.exec(val);
         if (partsSource == null) {
-            console.log(`${val} doesn't match ^(b\.([^.]+)\.([^.]+)|d\.(.+))$`);
             return undefined;
         }
-        const buffer = this.readInputFrom(!partsSource[4], partsSource[2], partsSource[3], partsSource[4]);
+        return {
+            isBuffer: !partsSource[4],
+            sourceId: partsSource[2],
+            pathId: partsSource[3],
+            completePath: partsSource[4]
+        };
+    }
+
+    resolveArgument(val) {
+        const breaked = this.breakPath(val);
+        let buffer = null;
+        if (breaked) {
+            buffer = this.readInputFrom(breaked.isBuffer, breaked.sourceId, breaked.pathId, breaked.completePath);
+        } else {
+            buffer = SimpleObj.getValue(this.context.data, val, null);
+        }
         return buffer;
     }
 }
