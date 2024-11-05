@@ -238,6 +238,19 @@ class StepBasic {
         }
         return buffer;
     }
+
+    writeArgument(path, val) {
+        const braked = this.breakPath(path);
+        if (braked) {
+            if (braked.isBuffer) {
+                this.context.saveBufferData(braked.sourceId, braked.pathId, val);
+            } else {
+                SimpleObj.recreate(this.context.data, braked.completePath, val);
+            }
+        } else {
+            SimpleObj.recreate(this.context.data, path, val);
+        }
+    }
 }
 
 module.exports = {
