@@ -1,4 +1,6 @@
 
+// Low pressure implementation in two ways...
+
 function debounce(fn, delay) {
     let timer = null;
 
