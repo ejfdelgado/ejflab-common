@@ -9,6 +9,7 @@ await ModuloSonido.play('/assets/sounds/finish.mp3');
 
 class ModuloSonido {
 	static sonidos = {};
+	static sincId = null;
 	static createAudio({ source, volume = 100, loop = false }) {
 		return new Promise((resolve, reject) => {
 			const audio = new Audio();
@@ -42,6 +43,9 @@ class ModuloSonido {
 		return await Promise.all(promesas);
 	};
 
+	static setSincId(id) {
+		ModuloSonido.sincId = id;
+	}
 
 	static async play(llave, loop = false, volume = 1) {
 		let ref = null;
@@ -55,6 +59,9 @@ class ModuloSonido {
 			&& ref.readyState > 2;
 		if (!isPlaying) {
 			ref.loop = loop;
+			if (ModuloSonido.sincId) {
+				ref.setSinkId(ModuloSonido.sincId);
+			}
 			ref.play();
 		}
 	};
