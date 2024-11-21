@@ -10,7 +10,18 @@ class StepTimeLineEnds extends StepBasic {
         }
         const finished = !(timeline.t + timeline.period < timeline.end);
         if (finished) {
-            SimpleObj.recreate(this.context.data, "scope.progress", 100);
+            SimpleObj.recreate(this.context.data, `scope.progressEach.${timeLineId}`, 100);
+            // Compute the overall advance
+            const allProgress = SimpleObj.getValue(this.context.data, `scope.progressEach`, {});
+            const keysProgress = Object.keys(allProgress);
+            let sum = 0;
+            for (let i = 0; i < keysProgress.length; i++) {
+                const oneKey = keysProgress[i];
+                const progress = allProgress[oneKey];
+                sum += progress;
+            }
+            const average = sum / keysProgress.length;
+            SimpleObj.recreate(this.context.data, `scope.progress`, Math.ceil(average));
         }
         return finished;
     }

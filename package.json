@@ -1,7 +1,7 @@
 {
   "name": "@ejfdelgado/ejflab-common",
   "type": "commonjs",
-  "version": "1.9.1",
+  "version": "1.10.1",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ejfdelgado/ejflab-common.git"
