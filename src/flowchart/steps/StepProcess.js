@@ -82,20 +82,21 @@ class StepProcess extends StepBasic {
         for (let i = 1; i < this.args.length; i++) {
             const sourcePair = this.args[i];
             const partsSource = /^(in|out):(b\.([^.]+)\.([^.]+)|d\.(.+))$/i.exec(sourcePair);
-            if (partsSource == null) {
-                console.log(`${sourcePair} doesn't match ^(in|out)\.(b\.([^.]+)\.([^.]+)|d\.(.+))$`);
-                return false;
-            }
-            if (partsSource[1] == "in") {
-                // It's an input
-                const buffer = this.readInputFrom(!partsSource[5], partsSource[3], partsSource[4], partsSource[5]);
-                if (buffer === undefined) {
-                    return false;
+            if (partsSource !== null) {
+                if (partsSource[1] == "in") {
+                    // It's an input
+                    const buffer = this.readInputFrom(!partsSource[5], partsSource[3], partsSource[4], partsSource[5]);
+                    if (buffer === undefined) {
+                        return false;
+                    }
+                    inputs.push(buffer);
+                } else {
+                    // Its an output
+                    outputs.push(partsSource[2]);
                 }
-                inputs.push(buffer);
             } else {
-                // Its an output
-                outputs.push(partsSource[2]);
+                // Place the raw input
+                inputs.push(sourcePair);
             }
         }
 

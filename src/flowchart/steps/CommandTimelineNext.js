@@ -10,11 +10,11 @@ class CommandTimelineNext extends CommandBasic {
         }
         if ([null, undefined].indexOf(timeline.t) >= 0) {
             timeline.t = timeline.start;
-        } else {
-            timeline.t = timeline.t + timeline.period;
-            if (timeline.t > timeline.end) {
-                timeline.t = timeline.end;
-            }
+        }
+        // Always start from the period and expect to read backwards
+        timeline.t = timeline.t + timeline.period;
+        if (timeline.t > timeline.end) {
+            timeline.t = timeline.end;
         }
 
         // Check if should create N array
