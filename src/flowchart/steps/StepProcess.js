@@ -100,6 +100,8 @@ class StepProcess extends StepBasic {
             }
         }
 
+        const currentIndex = inputs[0];
+        const useIndexedN = (typeof currentIndex == "number");
         const namedInputs = {};
         if (!!inputConnectionsConf) {
             for (let i = 0; i < inputConnectionsConf.length; i++) {
@@ -108,7 +110,12 @@ class StepProcess extends StepBasic {
                 if (buffer === undefined) {
                     return false;
                 }
-                namedInputs[key] = buffer;
+                if (useIndexedN && buffer instanceof Array) {
+                    // Connect the indexed part of the array, even if it is undefined
+                    namedInputs[key] = buffer[currentIndex];
+                } else {
+                    namedInputs[key] = buffer;
+                }
             }
         }
 
