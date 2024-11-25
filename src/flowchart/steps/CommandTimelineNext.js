@@ -16,6 +16,18 @@ class CommandTimelineNext extends CommandBasic {
                 timeline.t = timeline.end;
             }
         }
+
+        // Check if should create N array
+        if (typeof timeline.n == "number" && timeline.n > 0) {
+            const dperiod = timeline.period / timeline.n;
+            const list = new Array(timeline.n);
+            for (let i=0; i<list.length; i++) {
+                list[i] = {done: false};
+            }
+            timeline.dperiod = dperiod;
+            timeline.list = list;
+        }
+
         // Compute advance percentage
         const percentage = (timeline.t - timeline.start) / (timeline.end - timeline.start);
         SimpleObj.recreate(this.context.data, `scope.progressEach.${timeLineId}`, Math.ceil(percentage * 100));
