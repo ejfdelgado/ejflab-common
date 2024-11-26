@@ -13,6 +13,8 @@ const { StepCheckSrc } = require("./steps/StepCheckSrc");
 
 const { CommandInc } = require("./steps/CommandInc");
 const { CommandSet } = require("./steps/CommandSet");
+const { CommandTic } = require("./steps/CommandTic");
+const { CommandToc } = require("./steps/CommandToc");
 const { StepReadSrc } = require('./steps/StepReadSrc');
 const { StepTimeLineEnds } = require('./steps/StepTimeLineEnds');
 const { StepTimeLineHasMore } = require('./steps/StepTimeLineHasMore');
@@ -67,6 +69,8 @@ class FlowChartExec {
         // Nodes
         this.registry["inc"] = CommandInc;
         this.registry["set"] = CommandSet;
+        this.registry["tic"] = CommandTic;
+        this.registry["toc"] = CommandToc;
         this.registry["timeline"] = CommandTimeline;
         this.registry["timelineNext"] = CommandTimelineNext;
         this.registry["milvus"] = CommandMilvus;

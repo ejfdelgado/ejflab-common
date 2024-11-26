@@ -1,4 +1,3 @@
-const { SimpleObj } = require("../../SimpleObj");
 const { CommandBasic } = require("./CommandBasic");
 
 class CommandSet extends CommandBasic {
