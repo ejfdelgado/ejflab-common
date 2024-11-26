@@ -283,6 +283,26 @@ class FlowChartExec {
         return response;
     }
 
+    removeIndexPathNodes(prefix) {
+        let count = 0;
+        const noPrefix = (node) => {
+            // Erase node ids...
+            delete this.nodesById[node.id];
+            let pased = node.prefix != prefix;
+            if (!pased) {
+                count++;
+            }
+            return pased;
+        };
+        this.flowchart.shapes = this.flowchart.shapes.filter(noPrefix);
+        this.flowchart.arrows = this.flowchart.arrows.filter(noPrefix);
+        console.log(`Removed ${count} nodes from flowchart with prefix ${prefix}`);
+        const foudPrefix = this.flowchart.prefixes.indexOf(prefix);
+        if (foudPrefix >= 0) {
+            this.flowchart.prefixes.splice(foudPrefix, 1);
+        }
+    }
+
     loadFlowChart(paths) {
         return this.loadFlowChartInternal(paths, true);
     }
@@ -318,6 +338,9 @@ class FlowChartExec {
             const xmlFlowText = fs.readFileSync(path, 'utf8');
             const parser = new XMLParser(options);
             const xmlFlow = parser.parse(xmlFlowText);
+            // Previous clear old prefix
+            this.removeIndexPathNodes(prefix);
+            // Loads new nodes for prefix
             const localFlowChart = this.processFlowChart(xmlFlow, prefix);
             this.interpretColor(localFlowChart.shapes);
             // 
@@ -337,11 +360,15 @@ class FlowChartExec {
                 localFlowChart.arrows.forEach(placeMetadata);
                 const startingPoints = this.getNodesWithText("start", undefined, localFlowChart);
                 if (this.actualNodes instanceof Array && startingPoints instanceof Array) {
+                    console.log(`Adding NEW #${startingPoints.length} starting points to flowchart`);
                     this.actualNodes.push(...startingPoints);
                 }
             }
             this.flowchart.shapes.push(...localFlowChart.shapes);
+            console.log(`Added ${localFlowChart.shapes.length} shapes with prefix ${prefix}`);
             this.flowchart.arrows.push(...localFlowChart.arrows);
+            console.log(`Added ${localFlowChart.arrows.length} arrows with prefix ${prefix}`);
+            console.log(`Added ${localFlowChart.arrows.length + localFlowChart.shapes.length} nodes with prefix ${prefix}`);
             this.flowchart.prefixes.push(prefix);
             if (check.flux) {
                 for (let key in check.flux) {

@@ -76,6 +76,18 @@ function myTest() {
             exp: "my name is undefined Delgado and I like undefined undefined",
             skipUndefined: false,
         },
+        {
+            txt: "My ${index} lastname is ${lastname.${index}}",
+            data: { lastname: ["delgado", "leyton"], index: 0 },
+            exp: "My 0 lastname is delgado",
+            skipUndefined: false,
+        },
+        {
+            txt: "My ${index} lastname is ${lastname.${index}.detail}",
+            data: { lastname: [{ detail: "delgado" }, { detail: "leyton" }], index: 0 },
+            exp: "My 0 lastname is delgado",
+            skipUndefined: false,
+        },
     ];
 
     renderer.registerFunction("json", CsvFormatterFilters.json);

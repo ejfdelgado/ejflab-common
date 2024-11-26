@@ -213,6 +213,18 @@ class MyTemplate extends CsvWithFilters {
     }
     replaceBareValues(template, data, open = "\\{", close = "\\}", closeNoScape = "}", useStringify = false, skipUndefined = false) {
         const myPattern = new RegExp("\\$\\s*" + open + "([^" + closeNoScape + "]+)\\s*" + close, "g");
+        // Segond level replace
+        const myPattern2d = new RegExp("(\\$\\s*" + open + "[^$" + closeNoScape + "]+)\\$" + open + "([^" + closeNoScape + "]+)" + close + "([^" + closeNoScape + "]*" + close + ")", "g");
+        template = template.replace(myPattern2d, (match, g1, g2, g3) => {
+            const response = this.getColumnDescription(g2)[0];
+            const valor = SimpleObj.getValue(data, response.id);
+            const temp = this.filterValue(valor, response, undefined, response.id);
+            if (temp === undefined) {
+                return match;
+            } else {
+                return g1 + temp + g3;
+            }
+        });
         template = template.replace(myPattern, (match, g1) => {
             const response = this.getColumnDescription(g1)[0];
             const valor = SimpleObj.getValue(data, response.id);
