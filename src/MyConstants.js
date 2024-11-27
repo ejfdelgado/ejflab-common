@@ -121,6 +121,16 @@ class MyConstants {
         }
         return keyNameXs;
     }
+
+    static overwriteEnvVariables() {
+        MyConstants.EMAIL_SENDER = process.env.EMAIL_SENDER;
+        MyConstants.BUCKET.PUBLIC = process.env.BUCKET_PUBLIC;
+        MyConstants.BUCKET.PRIVATE = process.env.BUCKET_PRIVATE;
+
+        console.log(`EMAIL_SENDER=${MyConstants.EMAIL_SENDER}`);
+        console.log(`BUCKET_PUBLIC=${MyConstants.BUCKET_PUBLIC}`);
+        console.log(`BUCKET_PRIVATE=${MyConstants.BUCKET_PRIVATE}`);
+    }
 }
 
 try {
