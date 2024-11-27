@@ -128,8 +128,8 @@ class MyConstants {
         MyConstants.BUCKET.PRIVATE = process.env.BUCKET_PRIVATE;
 
         console.log(`EMAIL_SENDER=${MyConstants.EMAIL_SENDER}`);
-        console.log(`BUCKET_PUBLIC=${MyConstants.BUCKET_PUBLIC}`);
-        console.log(`BUCKET_PRIVATE=${MyConstants.BUCKET_PRIVATE}`);
+        console.log(`BUCKET_PUBLIC=${MyConstants.BUCKET.PUBLIC}`);
+        console.log(`BUCKET_PRIVATE=${MyConstants.BUCKET.PRIVATE}`);
     }
 }
 
