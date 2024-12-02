@@ -154,7 +154,9 @@ class StepProcess extends StepBasic {
             };
             const encoded = encode(payload);
             const buffer = Buffer.from(encoded);
-            const postResponse = await axios.post(`${postUrl}/process`, buffer, options);
+            const processorUrl = `${postUrl}/process`;
+            console.log(`Calling POST processor at ${processorUrl} with ${buffer.length} bytes`);
+            const postResponse = await axios.post(processorUrl, buffer, options);
         } else {
             console.log("No channel configuration found!");
             return false;
