@@ -720,6 +720,7 @@ class FlowChartExec {
                                 }
                             );
                         } catch (err) {
+                            console.log("executeAsArrow exception");
                             console.log(err);
                             resolve(
                                 {
@@ -798,6 +799,7 @@ class FlowChartExec {
                     // Node fail
                     // Maybe handle to set maximum retries and exponetial back off
                     // Add visibility in somewhere
+                    console.log("executeAsNode exception...");
                     console.log(err);
                 }
             }

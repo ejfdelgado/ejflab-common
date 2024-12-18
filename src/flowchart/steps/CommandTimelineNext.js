@@ -10,19 +10,24 @@ class CommandTimelineNext extends CommandBasic {
         }
         if ([null, undefined].indexOf(timeline.t) >= 0) {
             timeline.t = timeline.start;
+            if (typeof timeline.n == "number" && timeline.n > 1) {
+                // Always start from the period and expect to read backwards
+                timeline.t = timeline.t + timeline.period;
+            }
+        } else {
+            timeline.t = timeline.t + timeline.period;
         }
-        // Always start from the period and expect to read backwards
-        timeline.t = timeline.t + timeline.period;
+
         if (timeline.t > timeline.end) {
             timeline.t = timeline.end;
         }
 
         // Check if should create N array
-        if (typeof timeline.n == "number" && timeline.n > 0) {
+        if (typeof timeline.n == "number" && timeline.n > 1) {
             const dperiod = timeline.period / timeline.n;
             const list = new Array(timeline.n);
-            for (let i=0; i<list.length; i++) {
-                list[i] = {done: false};
+            for (let i = 0; i < list.length; i++) {
+                list[i] = { done: false };
             }
             timeline.dperiod = dperiod;
             timeline.list = list;
