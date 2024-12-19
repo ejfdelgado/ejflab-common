@@ -120,7 +120,8 @@ class StepProcess extends StepBasic {
         }
 
         const room = this.context.getRoom();
-        const dbData = SimpleObj.getValue(this.context.data, `args.db`, null);
+        const dbData = SimpleObj.getValue(this.context.data, `args.db`, {});
+        const general = SimpleObj.getValue(this.context.data, `args.general`, {});
         //console.log(`StepProcess processorName:${processorName} processorInstance:${processorInstance} processorMethod:${processorMethod} in room ${room}`);
         this.messageUID = IdGen.num2ord(new Date().getTime());
         this.pendingCall = `${room}-${this.id}-${this.messageUID}`;
@@ -136,7 +137,8 @@ class StepProcess extends StepBasic {
             id: this.pendingCall,
             data: this.configuration[instanceNumber],
             room,
-            dbData
+            dbData,
+            general
         };
         //console.log("dbData="+JSON.stringify(dbData));
 
