@@ -20,25 +20,41 @@ class CommandMilvus extends CommandBasic {
 
         const milvusSrv = this.context.getSuperContext().getMilvusClient();
         const { client } = milvusSrv.connect();
-        if (action == "database.create") {
-            await this.dataBaseCreate(milvusSrv, client, dataBaseName);
-        } else if (action == "database.recreate") {
-            await this.dataBaseRecreate(milvusSrv, client, dataBaseName);
-        } else if (action == "collection.create") {
-            const collectionConfig = this.args[2];
-            const configuration = SimpleObj.getValue(this.context.data, collectionConfig, null);
-            if (configuration) {
-                await this.collectionCreate(milvusSrv, client, dataBaseName, configuration);
-            } else {
-                throw new Error(`No MILVUS configuration in ${collectionConfig}`);
+        let response = null;
+        try {
+            if (action == "database.create") {
+                response = await this.dataBaseCreate(milvusSrv, client, dataBaseName);
+            } else if (action == "database.recreate") {
+                response = await this.dataBaseRecreate(milvusSrv, client, dataBaseName);
+            } else if (action == "collection.create") {
+                const collectionConfig = this.args[2];
+                const configuration = SimpleObj.getValue(this.context.data, collectionConfig, null);
+                if (configuration) {
+                    response = await this.collectionCreate(milvusSrv, client, dataBaseName, configuration);
+                } else {
+                    throw new Error(`No MILVUS configuration in ${collectionConfig}`);
+                }
+            } else if (action == "collection.destroy") {
+                const collectionName = this.args[2];
+                response = await milvusSrv.dropCollectionOfDatabase(client, dataBaseName, collectionName);
+            } else if (action == "collection.describe") {
+                const collectionName = this.args[2];
+                response = await milvusSrv.describeCollectionOfDatabase(client, dataBaseName, collectionName);
+            } else if (action == "introspect") {
+                response = await milvusSrv.introspect(client);
+            } else if (action == "database.destroy") {
+                response = await milvusSrv.dropDatabase(client, dataBaseName);
+            } else if (action == "database.destroy_temp") {
+                response = await milvusSrv.dropDatabaseTemp(client);
+            } else if (action == "database.exists") {
+                response = await milvusSrv.existsDatabase(client, dataBaseName);
             }
-        } else if (action == "introspect") {
-            await milvusSrv.introspect(client);
-        } else if (action == "database.destroy") {
-            await milvusSrv.dropDatabase(client, dataBaseName);
-        } else if (action == "database.destroy_temp") {
-            await milvusSrv.dropDatabaseTemp(client);
+        } catch (err) {
+            throw err;
+        } finally {
+            await milvusSrv.releaseConnection(client);
         }
+        return response;
     }
 }
 
