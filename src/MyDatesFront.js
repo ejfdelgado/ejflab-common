@@ -13,16 +13,16 @@ class MyDatesFront extends MyDates {
         }
     }
     static formatDate(now, ...args) {
-        return MyDates.formatDateBasic(dateformat.default, now, args);
+        return MyDates.formatDateBasic(dateformat.default, now, ...args);
     }
     static formatDateCompleto(now, ...args) {
-        return MyDates.formatDateCompletoBasic(dateformat.default, now, args);
+        return MyDates.formatDateCompletoBasic(dateformat.default, now, ...args);
     }
     static formatDateSimple(now, ...args) {
-        return MyDates.formatDateSimpleBasic(dateformat.default, now, args);
+        return MyDates.formatDateSimpleBasic(dateformat.default, now, ...args);
     }
     static formatTime(now, ...args) {
-        return MyDates.formatTimeBasic(dateformat.default, now, args);
+        return MyDates.formatTimeBasic(dateformat.default, now, ...args);
     }
     static getServerTime() {
         return new Date().getTime() - this.timeDifference;

@@ -1,5 +1,7 @@
 const offset = new Date().getTimezoneOffset() / 60;
 
+// https://www.npmjs.com/package/dateformat
+
 class MyDates {
     static getSelectedLanguage() {
         const urlParams = new URLSearchParams(window.location.search);
@@ -136,44 +138,85 @@ class MyDates {
             deadline: (mananaInicio.getTime() - hoy.getTime()),
         };
     }
+    // MyDates.getDefaults(args)
+    static getDefaults(args, currentYear, nextYears, myDefault = "") {
+        if (args instanceof Array) {
+            if (args.length == 1) {
+                currentYear = args[0];
+                nextYears = args[0];
+            } else if (args.length == 2) {
+                currentYear = args[0];
+                nextYears = args[1];
+            }
+            if (args.length >= 3) {
+                myDefault = args[2];
+            }
+        }
+        return {
+            currentYear,
+            nextYears,
+            myDefault
+        };
+    }
+
     static formatDateBasic(dateformat, now, ...args) {
+        const {
+            currentYear,
+            nextYears,
+            myDefault
+        } = MyDates.getDefaults(args, "opcion2", "opcion1", "Día / Mes / Año");
         if (now instanceof Date) {
             if (new Date().getFullYear() == now.getFullYear()) {
-                return dateformat(now, "opcion2");
+                return dateformat(now, currentYear);
             } else {
-                return dateformat(now, "opcion1");
+                return dateformat(now, nextYears);
             }
         } else {
-            return "Día / Mes / Año";
+            return myDefault;
         }
     }
     static formatDateSimpleBasic(dateformat, now, ...args) {
+        const {
+            currentYear,
+            nextYears,
+            myDefault
+        } = MyDates.getDefaults(args, "simple2", "simple1", "Día / Mes / Año");
         if (now instanceof Date) {
             if (new Date().getFullYear() == now.getFullYear()) {
-                return dateformat(now, "simple2");
+                return dateformat(now, currentYear);
             } else {
-                return dateformat(now, "simple1");
+                return dateformat(now, nextYears);
             }
         } else {
-            return "Día / Mes / Año";
+            return myDefault;
         }
     }
     static formatDateCompletoBasic(dateformat, now, ...args) {
+        const {
+            currentYear,
+            nextYears,
+            myDefault
+        } = MyDates.getDefaults(args, "completo2", "completo1", "Día / Mes / Año Hora:Minutos:Segundos");
         if (now instanceof Date) {
             if (new Date().getFullYear() == now.getFullYear()) {
-                return dateformat(now, "completo2");
+                return dateformat(now, currentYear);
             } else {
-                return dateformat(now, "completo1");
+                return dateformat(now, nextYears);
             }
         } else {
-            return "Día / Mes / Año Hora:Minutos:Segundos";
+            return myDefault;
         }
     }
     static formatTimeBasic(dateformat, now, ...args) {
+        const {
+            currentYear,
+            nextYears,
+            myDefault
+        } = MyDates.getDefaults(args, "opcion3", "opcion3", "Hora / Minuto");
         if (now instanceof Date) {
-            return dateformat(now, "opcion3");
+            return dateformat(now, currentYear);
         } else {
-            return "Hora / Minuto";
+            return myDefault;
         }
     }
     static formatPayu(dateformat, now) {
