@@ -10,7 +10,8 @@ class CommandPostgres extends CommandBasic {
         const script = this.args[3];
         const destination = this.args[4];
         const postgresSrv = this.context.getSuperContext().getPostgresClient();
-        if (action == "execute") {
+        const paging = action == "page";
+        if (["execute", "page"].indexOf(action) >= 0) {
             //console.log("Starting execute...");
             const dbIdData = SimpleObj.getValue(this.context.data, dbIdPath, null);
             let bodyData = {};
@@ -35,7 +36,21 @@ class CommandPostgres extends CommandBasic {
                     const payload = JSON.parse(JSON.stringify(dbIdData));
                     payload.object = bodyData[i];
                     payload.now = now;
-                    const result = await postgresSrv.executeFile(script, payload, client);
+                    const result = { rows: [], rowCount: 0, command: null };
+                    let localResult = { rows: [], rowCount: 0, command: null };
+                    if (paging) {
+                        if (typeof payload.limit !== "number") {
+                            payload.limit = 20;
+                        }
+                        payload.offset = 0;
+                    }
+                    do {
+                        localResult = await postgresSrv.executeFile(script, payload, client);
+                        result.rows.push(...localResult.rows);
+                        result.rowCount += localResult.rowCount;
+                        result.command = localResult.command;
+                        payload.offset += result.rows.length;
+                    } while (paging && localResult.rows.length > 0);
                     response.push(result);
                 }
                 await client.query("COMMIT");
