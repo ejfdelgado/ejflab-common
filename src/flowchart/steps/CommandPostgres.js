@@ -35,13 +35,15 @@ class CommandPostgres extends CommandBasic {
                 for (let i = 0; i < bodyData.length; i++) {
                     const payload = JSON.parse(JSON.stringify(dbIdData));
                     payload.object = bodyData[i];
+                    let { limit } = payload.object;
                     payload.now = now;
                     const result = { rows: [], rowCount: 0, command: null };
                     let localResult = { rows: [], rowCount: 0, command: null };
                     if (paging) {
-                        if (typeof payload.limit !== "number") {
-                            payload.limit = 20;
+                        if (typeof limit !== "number") {
+                            limit = 20;
                         }
+                        payload.limit = limit;
                         payload.offset = 0;
                     }
                     do {
