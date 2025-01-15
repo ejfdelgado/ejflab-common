@@ -373,16 +373,16 @@ class FlowChartDiagram {
                 for (let i = 0; i < nodos.length; i++) {
                     const nodo = nodos[i];
                     if (nodo['@_id']) {
-                        nodo['@_id'] = prefix + nodo['@_id'];
+                        nodo['@_id'] = prefix + "_" + nodo['@_id'];
                     }
                     if (nodo['@_source']) {
-                        nodo['@_source'] = prefix + nodo['@_source'];
+                        nodo['@_source'] = prefix + "_" + nodo['@_source'];
                     }
                     if (nodo['@_target']) {
-                        nodo['@_target'] = prefix + nodo['@_target'];
+                        nodo['@_target'] = prefix + "_" + nodo['@_target'];
                     }
                     if (nodo['@_parent']) {
-                        nodo['@_parent'] = prefix + nodo['@_parent'];
+                        nodo['@_parent'] = prefix + "_" + nodo['@_parent'];
                     }
                 }
             }
