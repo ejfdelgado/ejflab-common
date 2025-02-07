@@ -1,6 +1,6 @@
 
 class CsvWithFilters {
-    static PATTERN_FILTER = "\\s*([^|\\s]+)(\\s*\\|\\s*([^:\\s]+)\\s*(\\s*:\\s*([^:\\s]+)*)?)?";
+    static PATTERN_FILTER = "\\s*([^|\\s]+)(\\s*\\|\\s*([^:\\s]+)\\s*(:(.*))?)?";
     constructor() {
         this.filterRegistry = {
             classes: {
@@ -87,16 +87,11 @@ class CsvWithFilters {
                         }
                         const argumentos = [];
                         if (subpartes[5]) {
-                            argumentos.push(JSON.parse(subpartes[5]));
-                            let siguiente = null;
-                            siguiente = patron2.exec(completo);
-                            if (siguiente !== null) {
-                                siguiente[0].split(":").map((siguienteFixed) => {
-                                    if (siguienteFixed.trim().length > 0) {
-                                        argumentos.push(JSON.parse(siguienteFixed));
-                                    }
-
-                                });
+                            const allArguments = subpartes[5].split(":");
+                            for (let k = 0; k < allArguments.length; k++) {
+                                try {
+                                    argumentos.push(JSON.parse(allArguments[k]));
+                                } catch (err) { }
                             }
                         }
                         desc.argumentos = argumentos;

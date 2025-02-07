@@ -88,6 +88,12 @@ function myTest() {
             exp: "My 0 lastname is delgado",
             skipUndefined: false,
         },
+        {
+            txt: 'My ${ now | epoch2date : "mmm d yyyy" : "otro"}',
+            data: { now: new Date().getTime(), index: 0 },
+            exp: "My nada",
+            skipUndefined: false,
+        },
     ];
 
     renderer.registerFunction("json", CsvFormatterFilters.json);
@@ -96,6 +102,9 @@ function myTest() {
         return val + "-" + args.join("-");
     });
     renderer.registerFunction("rand", CsvFormatterFilters.rand);
+    renderer.registerFunction("epoch2date", (value, ...args) => {
+        return "nada";
+    });
 
     for (let i = 0; i < cases.length; i++) {
         const myCase = cases[i];
