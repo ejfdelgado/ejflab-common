@@ -448,6 +448,28 @@ class MyDates {
         var sDisplay = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
         return hDisplay + mDisplay + sDisplay;
     }
+
+    static age(dateMillis) {
+        if (typeof dateMillis == 'number' && !isNaN(dateMillis)) {
+            const dateOfBirth = new Date(dateMillis);
+            const dayOfBirth = dateOfBirth.getDate();
+            const millisDifference = new Date().getTime() - dateOfBirth.getTime();
+            const date = new Date(millisDifference);
+            const years = date.getFullYear() - 1970;
+            const months = date.getMonth();
+            let days = date.getDate();
+            if (days > dayOfBirth) {
+                days = date.getDate() - dayOfBirth;
+            }
+            const model = {
+                years,
+                months,
+                days
+            };
+            return model;
+        }
+        return null;
+    }
 }
 
 module.exports = {
