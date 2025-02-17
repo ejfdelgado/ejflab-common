@@ -12,6 +12,15 @@ const pIfFin = "\\$\\s*\\[\\s*endif\\s*\\]";
 const pElse = "\\$\\s*\\[\\s*else\\s*\\]";
 
 class MyTemplate extends CsvWithFilters {
+    static localGetValue(data, key) {
+        // The key could be a JSON
+        let trimed = key.trim();
+        if (trimed.startsWith('"')) {
+            // treated as json string
+            return JSON.parse(key);
+        }
+        return SimpleObj.getValue(data, key);
+    }
     static interpolate(text, model) {
         const renderer = new MyTemplate();
         return renderer.render(text, model);
@@ -217,7 +226,7 @@ class MyTemplate extends CsvWithFilters {
         const myPattern2d = new RegExp("(\\$\\s*" + open + "[^$" + closeNoScape + "]+)\\$" + open + "([^" + closeNoScape + "]+)" + close + "([^" + closeNoScape + "]*" + close + ")", "g");
         template = template.replace(myPattern2d, (match, g1, g2, g3) => {
             const response = this.getColumnDescription(g2)[0];
-            const valor = SimpleObj.getValue(data, response.id);
+            const valor = MyTemplate.localGetValue(data, response.id);
             const temp = this.filterValue(valor, response, undefined, response.id);
             if (temp === undefined) {
                 return match;
@@ -227,7 +236,7 @@ class MyTemplate extends CsvWithFilters {
         });
         template = template.replace(myPattern, (match, g1) => {
             const response = this.getColumnDescription(g1)[0];
-            const valor = SimpleObj.getValue(data, response.id);
+            const valor = MyTemplate.localGetValue(data, response.id);
             if (!useStringify) {
                 const temp = this.filterValue(valor, response, undefined, response.id);
                 if (!skipUndefined) {
