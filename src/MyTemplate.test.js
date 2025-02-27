@@ -94,6 +94,34 @@ function myTest() {
             exp: "My nada",
             skipUndefined: false,
         },
+        {
+            txt: ' $[for el1 in ${abuelo}] $[for el2 in ${el1.padre}] $[for el3 in ${el2.hijo}] ${el3.name} $[endfor] $[endfor] $[endfor] ',
+            data: {
+                abuelo: [
+                    {
+                        padre: [
+                            {
+                                hijo: [
+                                    {name: "Hugo"}
+                                ]
+                            },
+                            {
+                                hijo: [
+                                    {name: "Paco"}
+                                ]
+                            },
+                            {
+                                hijo: [
+                                    {name: "Luis"}
+                                ]
+                            },
+                        ]
+                    }
+                ]
+            },
+            exp: "    Hugo    Paco    Luis    ",
+            skipUndefined: false,
+        },
     ];
 
     renderer.registerFunction("json", CsvFormatterFilters.json);
@@ -111,7 +139,7 @@ function myTest() {
         const actual = renderer.render(myCase.txt, myCase.data, myCase.skipUndefined === true);
         //console.log(actual);
         if (actual !== myCase.exp) {
-            throw Error(`expected:\n${myCase.exp}\nactual:\n${actual}`);
+            throw Error(`expected:\n${JSON.stringify(myCase.exp)}\nactual:\n${JSON.stringify(actual)}`);
         } else {
             console.log(`case ${i + 1} OK!`);
         }
