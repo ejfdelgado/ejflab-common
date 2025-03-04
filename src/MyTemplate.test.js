@@ -122,6 +122,17 @@ function myTest() {
             exp: "    Hugo    Paco    Luis    ",
             skipUndefined: false,
         },
+        {
+            txt: "$[if ${choice_id} == null]NULL$[else]'${choice_id}'::uuid$[endif],",
+            data: {
+                choice_id: '3764d5b2-75ec-44fd-89e0-9414f12d5b60',
+                assessment_answered_id: '51b62095-b14b-42b2-931e-c8872ab72b6a',
+                question_id: 'a48dd6db-0243-4faf-bbbd-dd808e253025',
+                date_of_response: 1741050236700
+              },
+            exp: "'3764d5b2-75ec-44fd-89e0-9414f12d5b60'::uuid,",
+            skipUndefined: false,
+        },
     ];
 
     renderer.registerFunction("json", CsvFormatterFilters.json);
