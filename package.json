@@ -1,15 +1,16 @@
 {
   "name": "@ejfdelgado/ejflab-common",
   "type": "commonjs",
-  "version": "1.16.0",
+  "version": "1.16.1",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ejfdelgado/ejflab-common.git"
   },
   "description": "",
   "scripts": {
+    "bip": "ffplay /sound/finish.mp3 -nodisp -nostats -hide_banner -autoexit",
     "mylogin": "npm login",
-    "mypublish": "npm publish --access=public",
+    "mypublish": "npm publish --access=public && npm run bip",
     "clean": "rm -rf node_modules && npm cache clean --force && rm package-lock.json && npm install"
   },
   "engines": {

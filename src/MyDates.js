@@ -449,11 +449,14 @@ class MyDates {
         return hDisplay + mDisplay + sDisplay;
     }
 
-    static age(dateMillis) {
+    static age(dateMillis, currentMillis = null) {
+        if (!(typeof currentMillis == "number")) {
+            currentMillis = new Date().getTime();
+        }
         if (typeof dateMillis == 'number' && !isNaN(dateMillis)) {
             const dateOfBirth = new Date(dateMillis);
             const dayOfBirth = dateOfBirth.getDate();
-            const millisDifference = new Date().getTime() - dateOfBirth.getTime();
+            const millisDifference = currentMillis - dateOfBirth.getTime();
             const date = new Date(millisDifference);
             const years = date.getFullYear() - 1970;
             const months = date.getMonth();
