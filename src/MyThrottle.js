@@ -13,6 +13,8 @@ function debounce(fn, delay) {
 }
 
 /*
+IMPORTANT, the throttled function MUST be an async function, otherwise it will not work!
+
 const GAP_ms = 500;
 Si quieres tener en cuenta solo la primera invocación e ignorar las repetidas invocaciones con intervalos de menos de gap:
 new MyThrottle(GAP_ms, true);
@@ -29,7 +31,7 @@ class MyThrottle {
         this.isIgnoring = false;
     }
 
-    throttle(promisedFunction) {
+    throttle(promisedFunction, args = []) {
         const afterGap = () => {
             if (this.useFirst) {
                 if (calledTime == this.lastCalledTime) {
@@ -59,7 +61,7 @@ class MyThrottle {
             // Use first
             this.isCalling = true;
             this.isIgnoring = true;
-            promisedFunction().finally(afterCall);
+            promisedFunction(...args).finally(afterCall);
             setTimeout(afterGap, this.timeGap);
         } else {
             // Use last
@@ -67,7 +69,7 @@ class MyThrottle {
                 if (calledTime == this.lastCalledTime) {
                     // Call!
                     this.isCalling = true;
-                    promisedFunction().finally(afterCall);
+                    promisedFunction(...args).finally(afterCall);
                 } else {
                     console.log("Ignoring...");
                 }
