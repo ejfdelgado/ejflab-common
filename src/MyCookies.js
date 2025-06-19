@@ -7,7 +7,7 @@ class MyCookies {
         document.cookie = cname + '=' + cvalue + ';' + expires + ';path=/';
     }
 
-    static getCookie(cname) {
+    static getCookie(cname, def = null) {
         let name = cname + '=';
         let decodedCookie = decodeURIComponent(document.cookie);
         let ca = decodedCookie.split(';');
@@ -20,7 +20,7 @@ class MyCookies {
                 return c.substring(name.length, c.length);
             }
         }
-        return null;
+        return def;
     }
 
     static deleteCookie(cname) {
