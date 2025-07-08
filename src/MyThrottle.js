@@ -37,8 +37,6 @@ class MyThrottle {
                 if (calledTime == this.lastCalledTime) {
                     // Listen again
                     this.isIgnoring = false;
-                } else {
-                    console.log("Ignoring...");
                 }
             } else {
                 this.isIgnoring = false;
@@ -51,7 +49,6 @@ class MyThrottle {
         }
         if (this.isCalling || this.isIgnoring) {
             // Ignore
-            console.log("Ignoring...");
             return;
         }
         const afterCall = () => {
@@ -70,8 +67,6 @@ class MyThrottle {
                     // Call!
                     this.isCalling = true;
                     promisedFunction(...args).finally(afterCall);
-                } else {
-                    console.log("Ignoring...");
                 }
             }, this.timeGap);
         }
