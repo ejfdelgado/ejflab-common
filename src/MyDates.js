@@ -108,6 +108,8 @@ class MyDates {
         masks.simple2 = 'ddd d mmm';
 
         masks.opcion3 = 'h:MM TT';
+        masks.opcion4 = 'HH:MM:ss';
+        masks.opcion5 = 'HH:MM:ss TT';
 
         // yyyy-MM-ddTHH:mm:ss
         // https://www.npmjs.com/package/dateformat
