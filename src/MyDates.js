@@ -64,7 +64,7 @@ class MyDates {
                 "Sat",
                 "Sunday",
                 "Monday",
-                "Thuesday",
+                "Tuesday",
                 "Wednesday",
                 "Thursday",
                 "Friday",
