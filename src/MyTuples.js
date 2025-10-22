@@ -421,7 +421,7 @@ class MyTuples {
                 }
 
                 const compFun = (a, b) => {
-                    return b.k.length - a.k.length;
+                    return a.k.length - b.k.length;
                 };
                 batch['*'].sort(compFun);
                 batch['-'].sort(compFun);
@@ -432,6 +432,9 @@ class MyTuples {
                     myFreeze = JSON.stringify(nuevo);
                     pending.push(batch);
                     startProcess();
+                } else {
+                    // Nothing to do...
+                    setActivityStatus(false);
                 }
 
                 return batch;

@@ -173,8 +173,11 @@ const test = async () => {
             throw Error(`referencia ${referencia} \nintercambio ${intercambio}\nresultadoTxt ${resultadoTxt}`);
         }
 
+        prueba.e.r = differences.r;
+        prueba.e.t = differences.t;
+        prueba.e.total = differences.total;
         if (sortify(prueba.e) != differencesTxt) {
-            throw Error(`Modificación fallida ${JSON.stringify(prueba)}\n${differencesTxt}`);
+            throw Error(`Modificación fallida ${sortify(prueba.e)}\n${differencesTxt}`);
         }
 
         if (sortify(prueba.f) != sortify(afectado)) {
@@ -325,6 +328,7 @@ const testSimple = () => {
     console.log(afectado3);
 }
 
-testSimple();
+test();
+//testSimple();
 //testArrayCompress();
 //testConverter();
